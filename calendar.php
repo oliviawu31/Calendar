@@ -113,7 +113,7 @@ $daysInMonth = date("t", $firstDayTime);  // 當月的天數
     </style>
 </head>
 <body>
-<a id="home" href="./index.html">Home</a>
+<a id="home" href="./index.php">Home</a>
 
 <h1>萬年曆</h1>
 
