@@ -10,7 +10,6 @@
             background-repeat: no-repeat;
             background-size: cover;
             height: 100vh;
-
         }
 
         table {
@@ -29,32 +28,48 @@
             width: 100PX;
             height: 60px;
         }
-        .holiday {
-            background-color: lightblue;
-            color: #999;
+        .holidays {
+            color:#851d17;
+            margin: 0 0;
+            font-size: 15px;
         }
         .grey-text {
             color: #999;
+            background-color: #ba9b8d;
+            border-radius: 5px;
+        }
+        /* 週末的背景色設為粉紅 */
+        .weekend {
+            background-color: #F4D6CC;
         }
         .today {
-            background: lightpink;
+            background-color: #C83E4D;
             color: white;
             font-weight: bolder;
+            animation: heart 2s .3s infinite ease;
+        }
+        @keyframes heart {
+            0%{ color: #E8F7EE; font-size: 20px} 
+            25%{ color: white; font-size: 15px}
+            50%{ color: #E8F7EE; font-size: 20px} 
+            75%{ color: white; font-size: 15px}
+            100%{ color: #E8F7EE; font-size: 20px} 
         }
         .nav {
             width: 100%;
             margin: auto;
+       
         }
         .nav table td {
             border: 0px;
             padding: 0;
-            background-color: lightblue;
+            background-color: #4E937A;
         }
         a {
             text-decoration: none;
             background-color: #ba9b8d;
             padding: 5px;
-            margin: 0 3px;
+            margin: 0 10px;
             border-radius: 10px;
             color: white;
             transition: 0.5s;
@@ -67,14 +82,21 @@
         a:hover {
             color: orange;
         }
-        /* 週末的背景色設為粉紅 */
-        .weekend {
-            background-color: #f8b4d9;
-        }
+ 
         .backToday{
             margin-top: 5vh;
         }
+        td[class^='day']:hover {
+            transition: .5s;
+            background-color: #FF9152; 
+            cursor: pointer; /* 滑鼠指標變為點擊手勢 */
+            color: white;
+            transform: translateY(-5px);
+        }
 
+        .week{
+            color:lightblue;
+        }
     </style>
 </head>
 <body>
@@ -126,18 +148,13 @@ $tprevYear = $year -1;
 $tnextYear = $year +1;
 
 
-// 每年特別的日期
-$spDate = [
-    '2024-11-07' => "立冬",
-    '2024-11-22' => '小雪'
-];
-
 // 每年固定的假期
 $holidays = [
     '01-01' => "元旦",
-    '02-10' => "春節", // 例子：2024年春節是2月10日
-    '06-25' => "端午節", // 例子：2024年端午節是6月25日
-    '09-17' => "中秋節", // 例子：2024年中秋節是9月17日
+    '02-28' => "和平紀念日", 
+    '04-04' => "兒童節",
+    '04-05' => "清明節", 
+    '10-10' => "國慶日", 
     '12-25' => "聖誕節",
 ];
 
@@ -156,11 +173,11 @@ $daysInMonth = date("t", $firstDayTime);  // 當月的天數
 <div class="nav">
     <table style="width:100%">
         <tr>
-            <td style='text-align:left'>
-                <a href="index.php?year=<?= $prevYear; ?>&month=<?= $prevMonth; ?>">上一個月</a>
+            <td style='text-align:left;'>
                 <a href="index.php?year=<?= $tprevYear; ?>&month=<?= $month; ?>">前年</a>
+                <a href="index.php?year=<?= $prevYear; ?>&month=<?= $prevMonth; ?>">上一個月</a>
             </td>
-            <td>
+            <td style="color: white;">
                 <?= $year; ?> 年 <?= $month; ?> 月
             </td>
             <td style='text-align:right'>
@@ -172,15 +189,15 @@ $daysInMonth = date("t", $firstDayTime);  // 當月的天數
 </div>
 
 <table>
-<tr>
-    <td>日</td>
-    <td>一</td>
-    <td>二</td>
-    <td>三</td>
-    <td>四</td>
-    <td>五</td>
-    <td>六</td>
-</tr>
+        <tr>
+            <td style="color: #A72608">日</td>
+            <td style="color: #004F2D">一</td>
+            <td style="color: #004F2D">二</td>
+            <td style="color: #004F2D">三</td>
+            <td style="color: #004F2D">四</td>
+            <td style="color: #004F2D">五</td>
+            <td style="color: #A72608">六</td>
+        </tr>
 <?php
 // 計算顯示的天數
 $daysShown = 0; // 記錄顯示的天數
@@ -204,12 +221,12 @@ for ($i = 0; $i < 6; $i++) { // 六行
             // 判斷是否為週末（週日和週六）
             $isWeekendClass = (date("w", $theDayTime) == 0 || date("w", $theDayTime) == 6) ? 'weekend' : '';
 
-            echo "<td class='$theMonthClass $isTodayClass $isWeekendClass'>$day"; // 顯示日期
+            echo "<td class='day $theMonthClass $isTodayClass $isWeekendClass'>$day"; // 顯示日期
             if (isset($spDate[$dateStr])) {
                 echo "<br>{$spDate[$dateStr]}";
             }
             if (isset($holidays[date("m-d", $theDayTime)])) {
-                echo "<br>{$holidays[date("m-d", $theDayTime)]}";
+                echo "<br><p class='holidays'>{$holidays[date("m-d", $theDayTime)]}</p>";
             }
             echo "</td>";
         } else {
@@ -222,10 +239,10 @@ for ($i = 0; $i < 6; $i++) { // 六行
 }
 ?>
 </table>
-<div class="backToday" style="text-align: center;" >
-    <a href="index.php?year=<?= date('y'); ?>&month=<?= date('m'); ?>">TODAY</a>
-    <a id="home" href="./index.php">HOME</a>
-</div>
+    <div class="backToday" style="text-align: center;" >
+        <a href="index.php?year=<?= date('y'); ?>&month=<?= date('m'); ?>">TODAY</a>
+        <a id="home" href="./index.php">HOME</a>
+    </div>
 
 </body>
 </html>
